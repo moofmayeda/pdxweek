@@ -1,24 +1,21 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Love pizza? Love burgers? Love talking about pizza and burgers? Then you'll love this simple app that allows users to take Pizza Week, Burger Week, etc. to a whole new level by voting for their favorites. They can vote via the web app or on Slack!
 
 Things you may want to cover:
 
-* Ruby version
+* Ruby 2.2.5
 
-* System dependencies
+* Rails 5.0.0.1
 
-* Configuration
+* Download a copy of the repo
 
-* Database creation
+* Bundle
 
-* Database initialization
+* Run rake db:create
 
-* How to run the test suite
+* Run rake db:migrate
 
-* Services (job queues, cache servers, search engines, etc.)
+* Create a few restaurants using Restaurant.create(name: "Example Restaurant") and you're good to go!
 
-* Deployment instructions
-
-* ...
+* Set up your Slack outgoing webhooks integration (optional) with the URL set to POST to /webhooks/slack
