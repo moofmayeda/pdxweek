@@ -1,4 +1,4 @@
-# README
+# PDX WEEK
 
 Love pizza? Love burgers? Love talking about pizza and burgers? Then you'll love this simple app that allows users to take Pizza Week, Burger Week, etc. to a whole new level by voting for their favorites. They can vote via the web app or on Slack!
 
