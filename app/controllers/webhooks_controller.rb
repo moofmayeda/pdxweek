@@ -14,14 +14,14 @@ class WebhooksController < ApplicationController
     when /\+/
       restaurants = get_named_restaurants(params[:text])
       restaurants.each { |restaurant| restaurant.upvotes.create(user_id: params[:user_id]) }
-      text = restaurants.map { |restaurant| "#{restaurant.name} now has #{restaurant.upvotes.count} upvotes and #{restaurant.downvotes.count} downvotes" }.join(', ') if restaurants.present?
+      text = show_details(restaurants) if restaurants.present?
     when /\-/
       restaurants = get_named_restaurants(params[:text])
       restaurants.each { |restaurant| restaurant.downvotes.create(user_id: params[:user_id]) }
-      text = restaurants.map { |restaurant| "#{restaurant.name} now has #{restaurant.upvotes.count} upvotes and #{restaurant.downvotes.count} downvotes" }.join(', ') if restaurants.present?
+      text = show_details(restaurants) if restaurants.present?
     else
       restaurants = get_named_restaurants(params[:text])
-      text = restaurants.map { |restaurant| "#{restaurant.name} now has #{restaurant.upvotes.count} upvotes and #{restaurant.downvotes.count} downvotes" }.join(', ') if restaurants.present?
+      text = show_details(restaurants) if restaurants.present?
     end
     render json: {'text' => text}
   end
