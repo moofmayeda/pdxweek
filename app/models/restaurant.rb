@@ -11,6 +11,12 @@ class Restaurant < ApplicationRecord
     .order('percent_total DESC NULLS LAST')
     .group('restaurants.id')
     .limit(number) }
+  scope :bottom, -> (number=nil) {
+    select('restaurants.*', '(SUM(CASE WHEN votes.up = true THEN 1.0 ELSE 0 END) / NULLIF(COUNT(votes.id), 0)) AS percent_total')
+    .left_outer_joins(:votes)
+    .order('percent_total ASC NULLS LAST')
+    .group('restaurants.id')
+    .limit(number) }
   scope :top_unrated, -> (user_id=nil, number=nil) {
     select('restaurants.*', '(SUM(CASE WHEN votes.up = true THEN 1.0 ELSE 0 END) / NULLIF(COUNT(votes.id), 0)) AS percent_total')
     .left_outer_joins(:votes)
