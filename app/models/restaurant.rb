@@ -5,8 +5,8 @@ class Restaurant < ApplicationRecord
 
   validates :name, uniqueness: true
 
-  scope :top, -> (number=3) {
-    select('restaurants.*', 'ROUND(100.0 * (SUM(CASE WHEN votes.up = true THEN 1 ELSE 0 END) / COUNT(votes.id)), 1) AS percent_total')
+  scope :top, -> (number=nil) {
+    select('restaurants.*', '(SUM(CASE WHEN votes.up = true THEN 1 ELSE 0 END) / COUNT(votes.id)) AS percent_total')
     .joins(:votes)
     .order('percent_total DESC')
     .group('restaurants.id')

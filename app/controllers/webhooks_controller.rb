@@ -4,7 +4,9 @@ class WebhooksController < ApplicationController
     text = "Sorry, I didn't get that. Try asking where to go or using the name of a restaurant with a plus to vote for it"
     case params[:text]
     when /where/
-      text = "The current top 3 are " + Restaurant.top(3).map(&:name).join(", ")
+      text = "The current top 3 are:\n" + ordered_list(3)
+    when /list/
+      text = ordered_list
     when /\+/
       restaurants = get_named_restaurants(params[:text])
       restaurants.each { |restaurant| restaurant.upvotes.create }
