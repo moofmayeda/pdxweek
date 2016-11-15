@@ -5,6 +5,8 @@ class WebhooksController < ApplicationController
     case params[:text]
     when /new/
       text = "New spots for #{params[:user_name]}:\n" + ordered_list(Restaurant.top_unrated(params[:user_id]))
+    when /history/
+      text = "#{params[:user_name]}'s voting history:\n" + Vote.by(params[:user_id]).order(created_at: :desc).map { |vote| "#{vote.restaurant.name} #{vote.up ? ':thumbsup:' : ':thumbsdown:'} #{vote.created_at.strftime('%a %-m-%-d')}" }.join("\n")
     when /best/
       text = "The current top 3 are:\n" + ordered_list(Restaurant.top(3))
     when /list/
