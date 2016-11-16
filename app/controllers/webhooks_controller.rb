@@ -17,15 +17,15 @@ class WebhooksController < ApplicationController
               "*specific restaurant name (with a + or -)*: adds an up or downvote to that restaurant\n"\
               "*info*: display this help menu"
     when /\bnew\b/i
-      text = "New spots for #{params[:user_name]}:\n" + ordered_list(Dish.category(category).year(year).top_unrated(params[:user_id]))
+      text = "New spots for #{params[:user_name]}:\n" + ordered_list(Dish.category(category).year(year).top_unrated(params[:user_id]).includes(:restaurant))
     when /\bhistory\b/i
       text = "#{params[:user_name]}'s voting history:\n" + Vote.category(category).year(year).by(params[:user_id]).order(created_at: :desc).map { |vote| "#{vote.restaurant.name} #{vote.up ? ':thumbsup:' : ':thumbsdown:'} #{vote.created_at.strftime('%a %-m-%-d')}" }.join("\n")
     when /\bbest\b/i
-      text = "The current top 3 are:\n" + ordered_list(Dish.category(category).year(year).top(3))
+      text = "The current top 3 are:\n" + ordered_list(Dish.category(category).year(year).top(3).includes(:restaurant))
     when /\bworst\b/i
-      text = "The current bottom 3 are:\n" + ordered_list(Dish.category(category).year(year).bottom(3))
+      text = "The current bottom 3 are:\n" + ordered_list(Dish.category(category).year(year).bottom(3).includes(:restaurant))
     when /\blist\b/i
-      text = ordered_list(Dish.category(category).year(year).top)
+      text = ordered_list(Dish.category(category).year(year).top.includes(:restaurant))
     when /\+/
       dishes = get_dishes_of_named_restaurants(params[:text], category, year)
       dishes.each { |dish| dish.upvotes.create(user_id: params[:user_id]) }
