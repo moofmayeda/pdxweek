@@ -8,21 +8,21 @@ class Dish < ApplicationRecord
   scope :year, -> (year=nil) { where(year: year) }
 
   scope :top, -> (number=nil) {
-    select('dishes.*', '(SUM(CASE WHEN votes.up = true THEN 1.0 ELSE 0 END) / NULLIF(COUNT(votes.id), 0)) AS percent_total')
+    select('dishes.*', 'COUNT(votes.id) AS votes', '(SUM(CASE WHEN votes.up = true THEN 1.0 ELSE 0 END) / NULLIF(COUNT(votes.id), 0)) AS percent_total')
     .left_outer_joins(:votes)
-    .order('percent_total DESC NULLS LAST')
+    .order('percent_total, votes DESC NULLS LAST')
     .group('dishes.id')
     .limit(number) }
   scope :bottom, -> (number=nil) {
-    select('dishes.*', '(SUM(CASE WHEN votes.up = true THEN 1.0 ELSE 0 END) / NULLIF(COUNT(votes.id), 0)) AS percent_total')
+    select('dishes.*', 'COUNT(votes.id) AS votes', '(SUM(CASE WHEN votes.up = true THEN 1.0 ELSE 0 END) / NULLIF(COUNT(votes.id), 0)) AS percent_total')
     .left_outer_joins(:votes)
-    .order('percent_total ASC NULLS LAST')
+    .order('percent_total ASC, votes DESC NULLS LAST')
     .group('dishes.id')
     .limit(number) }
   scope :top_unrated, -> (user_id=nil, number=nil) {
-    select('dishes.*', '(SUM(CASE WHEN votes.up = true THEN 1.0 ELSE 0 END) / NULLIF(COUNT(votes.id), 0)) AS percent_total')
+    select('dishes.*', 'COUNT(votes.id) AS votes', '(SUM(CASE WHEN votes.up = true THEN 1.0 ELSE 0 END) / NULLIF(COUNT(votes.id), 0)) AS percent_total')
     .left_outer_joins(:votes)
-    .order('percent_total DESC NULLS LAST')
+    .order('percent_total, votes DESC NULLS LAST')
     .group('dishes.id')
     .having('bool_and(votes.user_id != ? OR votes.user_id IS NULL)', user_id)
     .limit(number) }
