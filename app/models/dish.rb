@@ -26,4 +26,13 @@ class Dish < ApplicationRecord
     .group('dishes.id')
     .having('bool_and(votes.user_id != ? OR votes.user_id IS NULL)', user_id)
     .limit(number) }
+
+  def create_or_update_vote(user_id, user_name, up)
+    original_vote = self.votes.find_or_create_by(user_id: user_id) do |vote|
+      vote.user_name = user_name
+      vote.up = up
+    end
+    original_vote.up = up
+    original_vote.save! if original_vote.changed?
+  end
 end

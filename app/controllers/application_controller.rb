@@ -17,8 +17,11 @@ protected
   def show_full_details(list)
     result = list.map do |dish|
       text = "#{dish.restaurant.name}"
-      text += "\n#{dish.upvotes.count} :thumbsup:: _" + dish.upvotes.map(&:user_name).join(', ') + "_"
-      text += "\n#{dish.downvotes.count} :thumbsdown:: _" + dish.downvotes.map(&:user_name).join(', ') + "_"
+      text += "\n#{dish.upvotes.count} :thumbsup::"
+      text += " _" + dish.upvotes.map(&:user_name).join(', ') + "_" if dish.upvotes.present?
+      text += "\n#{dish.downvotes.count} :thumbsdown::"
+      text += " _" + dish.downvotes.map(&:user_name).join(', ') + "_" if dish.downvotes.present?
+      text
     end
     result.join("\n")
   end

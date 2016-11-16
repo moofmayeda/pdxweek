@@ -29,11 +29,11 @@ class WebhooksController < ApplicationController
       text = ordered_list(Dish.category(category).year(year).top.includes(:restaurant))
     when /\+/
       dishes = get_dishes_of_named_restaurants(params[:text], category, year)
-      dishes.each { |dish| dish.upvotes.create(user_id: params[:user_id], user_name: user_name) }
+      dishes.each { |dish| dish.create_or_update_vote(params[:user_id], params[:user_name], true) }
       text = "#{user_name} just gave a :thumbsup: to "  + show_summary(dishes) if dishes.present?
     when /\-/
       dishes = get_dishes_of_named_restaurants(params[:text], category, year)
-      dishes.each { |dish| dish.downvotes.create(user_id: params[:user_id], user_name: user_name) }
+      dishes.each { |dish| dish.create_or_update_vote(params[:user_id], params[:user_name], false) }
       text = "#{user_name} just gave a :thumbsdown: to "  + show_summary(dishes) if dishes.present?
     else
       dishes = get_dishes_of_named_restaurants(params[:text], category, year)
