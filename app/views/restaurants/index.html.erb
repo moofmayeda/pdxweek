@@ -1,4 +1,4 @@
-<ul>Restaurants</ul>
-<% @restaurants.each do |restaurant| %>
-  <li id=<%= restaurant.id %>><%= restaurant.name %>: <%= link_to "Upvotes", { controller: 'votes', action: "create", id: restaurant.id, vote: "up" }, method: 'post', remote: true %>: <span class='upvotes count'><%= restaurant.upvotes.count %></span>, <%= link_to "Downvotes", { controller: 'votes', action: "create", id: restaurant.id, vote: "down" }, method: 'post', remote: true %>: <span class='downvotes count'><%= restaurant.downvotes.count %></span></li>
-<% end %>
+<ul>Pizza Week</ul>
+  <%= render @pizza_restaurants %>
+<ul>Burger Week</ul>
+  <%= render @burger_restaurants %>
