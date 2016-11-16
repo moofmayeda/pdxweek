@@ -14,7 +14,7 @@ class WebhooksController < ApplicationController
               "*best*: top 3 ranked restaurants\n"\
               "*worst*: bottom 3 ranked restaurants\n"\
               "*list*: all restaurants listed from best to worst to unrated\n"\
-              "*specific restaurant name*: shows how many votes it has\n"\
+              "*specific restaurant name*: show voting history for that restaurant\n"\
               "*specific restaurant name (with a + or -)*: adds an up or downvote to that restaurant\n"\
               "*info*: display this help menu"
     when /\bnew\b/i
