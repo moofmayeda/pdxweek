@@ -1,7 +1,8 @@
 class Restaurant < ApplicationRecord
-  has_many :upvotes,    -> { where up: true }, class_name: "Vote"
-  has_many :downvotes,  -> { where up: false }, class_name: "Vote"
-  has_many :votes, dependent: :destroy
+  has_many :upvotes, through: :dishes, source: :upvotes
+  has_many :downvotes,  through: :dishes, source: :downvotes
+  has_many :votes, through: :dishes
+  has_many :dishes, dependent: :destroy
 
   validates :name, uniqueness: true
 
