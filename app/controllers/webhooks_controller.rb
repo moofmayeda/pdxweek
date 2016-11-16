@@ -1,17 +1,17 @@
 class WebhooksController < ApplicationController
   def slack
     not_found unless params[:token] == ENV['SLACK_TOKEN']
-    text = "Sorry, I didn't get that. Try asking where to go or using the name of a restaurant with a plus to vote for it"
+    text = "Sorry, I didn't get that. Say the name of a restaurant with a +/- to vote, or say 'new' to get the best places you haven't been to yet."
     case params[:text]
-    when /new/
+    when /\bnew\b/i
       text = "New spots for #{params[:user_name]}:\n" + ordered_list(Restaurant.top_unrated(params[:user_id]))
-    when /history/
+    when /\bhistory\b/i
       text = "#{params[:user_name]}'s voting history:\n" + Vote.by(params[:user_id]).order(created_at: :desc).map { |vote| "#{vote.restaurant.name} #{vote.up ? ':thumbsup:' : ':thumbsdown:'} #{vote.created_at.strftime('%a %-m-%-d')}" }.join("\n")
-    when /best/
+    when /\bbest\b/i
       text = "The current top 3 are:\n" + ordered_list(Restaurant.top(3))
-    when /worst/
+    when /\bworst\b/i
       text = "The current bottom 3 are:\n" + ordered_list(Restaurant.bottom(3))
-    when /list/
+    when /\blist\b/i
       text = ordered_list(Restaurant.top)
     when /\+/
       restaurants = get_named_restaurants(params[:text])
@@ -30,6 +30,6 @@ class WebhooksController < ApplicationController
 
 private
   def get_named_restaurants(text)
-    Restaurant.all.select { |restaurant| text.include? restaurant.name }
+    Restaurant.all.select { |restaurant| text.downcase.include? restaurant.name.downcase }
   end
 end
