@@ -4,14 +4,15 @@ class WebhooksController < ApplicationController
     text = "Sorry, I didn't get that. Say the name of a restaurant with a +/- to vote, or say 'info' for a list of all keywords."
     case params[:text]
     when /\binfo\b/i
-      text =  "Available keywords:\n"\
-              "new : restaurants that you haven't been to yet, ranked from best to worst\n"\
-              "history : your voting history\n"\
-              "best : top 3 ranked restaurants\n"\
-              "worst : bottom 3 ranked restaurants\n"\
-              "list : all restaurants listed from best to worst to unrated\n"\
-              "specific restaurant name : shows how many up and downvotes it has\n"\
-              "specific restaurant name with a + or - : adds an up or downvote to that restaurant"
+      text =  "_Available keywords_\n"\
+              "*new*: restaurants that you haven't been to yet, ranked from best to worst\n"\
+              "*history*: your voting history\n"\
+              "*best*: top 3 ranked restaurants\n"\
+              "*worst*: bottom 3 ranked restaurants\n"\
+              "*list*: all restaurants listed from best to worst to unrated\n"\
+              "*specific restaurant name*: shows how many votes it has\n"\
+              "*specific restaurant name (with a + or -)*: adds an up or downvote to that restaurant\n"\
+              "*info*: display this help menu"
     when /\bnew\b/i
       text = "New spots for #{params[:user_name]}:\n" + ordered_list(Restaurant.top_unrated(params[:user_id]))
     when /\bhistory\b/i
