@@ -16,11 +16,11 @@ class WebhooksController < ApplicationController
     when /\+/
       restaurants = get_named_restaurants(params[:text])
       restaurants.each { |restaurant| restaurant.upvotes.create(user_id: params[:user_id]) }
-      text = show_details(restaurants) if restaurants.present?
+      text = "#{params[:user_name]} just gave a :thumbsup: to "  + show_details(restaurants) if restaurants.present?
     when /\-/
       restaurants = get_named_restaurants(params[:text])
       restaurants.each { |restaurant| restaurant.downvotes.create(user_id: params[:user_id]) }
-      text = show_details(restaurants) if restaurants.present?
+      text = "#{params[:user_name]} just gave a :thumbsdown: to "  + show_details(restaurants) if restaurants.present?
     else
       restaurants = get_named_restaurants(params[:text])
       text = show_details(restaurants) if restaurants.present?
