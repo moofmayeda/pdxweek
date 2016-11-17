@@ -1,11 +1,11 @@
 class WebhooksController < ApplicationController
   def slack
-    category = params[:trigger_word][1..-2]
-    category = "burger" if category == "hamburger"
-    not_found unless params[:token] == ENV['SLACK_TOKEN'] && Rails.configuration.categories.include?(category)
+    category = params[:command][1..-1]
+    not_found unless params[:token] == ENV['SLACK_SLASH_TOKEN'] && Rails.configuration.categories.include?(category)
     text = "Sorry, I didn't get that. Say the name of a restaurant with a +/- to vote, or say 'info' for a list of all keywords."
     year = Time.now.year
     user_name = params[:user_name]
+    visibility = ""
     case params[:text]
     when /\binfo\b/i
       text =  "_Available keywords_\n"\
@@ -32,16 +32,22 @@ class WebhooksController < ApplicationController
     when /\+/
       dishes = get_dishes_of_named_restaurants(params[:text], category, year)
       dishes.each { |dish| dish.create_or_update_vote(params[:user_id], params[:user_name], true) }
-      text = "#{user_name} just gave a :thumbsup: to "  + show_summary(dishes) if dishes.present?
+      if dishes.present?
+        text = "#{user_name} just gave a :thumbsup: to "  + show_summary(dishes)
+        visibility = 'in_channel'
+      end
     when /\-/
       dishes = get_dishes_of_named_restaurants(params[:text], category, year)
       dishes.each { |dish| dish.create_or_update_vote(params[:user_id], params[:user_name], false) }
-      text = "#{user_name} just gave a :thumbsdown: to "  + show_summary(dishes) if dishes.present?
+      if dishes.present?
+        text = "#{user_name} just gave a :thumbsdown: to "  + show_summary(dishes)
+        visibility = 'in_channel'
+      end
     else
       dishes = get_dishes_of_named_restaurants(params[:text], category, year)
       text = show_full_details(dishes) if dishes.present?
     end
-    render json: {'text' => text}
+    render json: {'text': text, 'response_type': visibility }
   end
 
 private
