@@ -1,7 +1,7 @@
 class WebhooksController < ApplicationController
   def slack
     category = params[:trigger_word][1..-2]
-    not_found unless params[:token] == ENV['SLACK_TOKEN'] && ['hamburger', 'pizza'].include?(category)
+    not_found unless params[:token] == ENV['SLACK_TOKEN'] && ['hamburger', 'pizza', 'dumpling'].include?(category)
     category = "burger" if category == "hamburger"
     text = "Sorry, I didn't get that. Say the name of a restaurant with a +/- to vote, or say 'info' for a list of all keywords."
     year = Time.now.year
