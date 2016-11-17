@@ -1,5 +1,10 @@
 <%= form_for @restaurant do |f| %>
   <%= render 'errors' %>
-  <%= f.text_field :name %>
-  <%= f.submit "Save" %>
+  <p>Name: <%= f.text_field :name %></p>
+  <%= f.fields_for :dishes do |d| %>
+    <p>Name of Dish: <%= d.text_field :name %></p>
+    <p>Category: <%= d.select :category, options_for_select(Rails.configuration.categories, d.object.category), include_blank: true %></p>
+    <p>Year: <%= d.number_field :year, value: d.object.year || Time.now.year %></p>
+  <% end %>
+  <p><%= f.submit "Save" %></p>
 <% end %>
