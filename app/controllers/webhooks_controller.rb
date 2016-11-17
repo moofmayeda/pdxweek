@@ -46,6 +46,8 @@ class WebhooksController < ApplicationController
 
 private
   def get_dishes_of_named_restaurants(text, category, year)
-    Dish.category(category).year(year).includes(:restaurant).select { |dish| text.downcase.include? dish.restaurant.name.downcase }
+    Dish.category(category).year(year).includes(:restaurant).select do |dish|
+      CGI::unescapeHTML(text).gsub(/[^0-9a-z]/i, '').downcase.include? dish.restaurant.name.gsub(/[^0-9a-z]/i, '').downcase
+    end
   end
 end
