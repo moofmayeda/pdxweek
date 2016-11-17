@@ -27,6 +27,8 @@ class WebhooksController < ApplicationController
       text = "The current bottom 3 are:\n" + ordered_list(Dish.category(category).year(year).bottom(3).includes(:restaurant))
     when /\blist\b/i
       text = ordered_list(Dish.category(category).year(year).top.includes(:restaurant))
+    when /\brandom\b/i
+      text = show_summary(Dish.category(category).year(year).limit(1).order('RANDOM()').includes(:restaurant))
     when /\+/
       dishes = get_dishes_of_named_restaurants(params[:text], category, year)
       dishes.each { |dish| dish.create_or_update_vote(params[:user_id], params[:user_name], true) }
