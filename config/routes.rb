@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   post 'webhooks/slack'
-  post 'restaurants/:id', to: 'votes#create', as: 'vote'
+  resources :restaurants, except: [:show, :destroy]
 
-  root 'restaurants#index'
+  root 'restaurants#home'
 end
