@@ -4,6 +4,8 @@ class Dish < ApplicationRecord
   has_many :votes, dependent: :destroy
   belongs_to :restaurant
 
+  validates :category, inclusion: { in: Rails.configuration.categories }
+
   scope :category, -> (category=nil) { where(category: category) }
   scope :year, -> (year=nil) { where(year: year) }
 
