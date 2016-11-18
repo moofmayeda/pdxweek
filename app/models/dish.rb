@@ -18,21 +18,21 @@ class Dish < ApplicationRecord
   scope :top, -> (team_id=nil, number=nil) {
     select('dishes.*', 'COUNT(votes.id) AS votes', '(SUM(CASE WHEN votes.up = true THEN 1.0 ELSE 0 END) / NULLIF(COUNT(votes.id), 0)) AS percent_total')
     .left_outer_joins(:votes)
-    .where('votes.team_id = ?', team_id)
+    .where('votes.team_id = ? OR votes.id IS NULL', team_id)
     .order('percent_total DESC NULLS LAST, votes DESC')
     .group('dishes.id')
     .limit(number) }
   scope :bottom, -> (team_id=nil, number=nil) {
     select('dishes.*', 'COUNT(votes.id) AS votes', '(SUM(CASE WHEN votes.up = true THEN 1.0 ELSE 0 END) / NULLIF(COUNT(votes.id), 0)) AS percent_total')
     .left_outer_joins(:votes)
-    .where('votes.team_id = ?', team_id)
+    .where('votes.team_id = ? OR votes.id IS NULL', team_id)
     .order('percent_total ASC NULLS LAST, votes DESC')
     .group('dishes.id')
     .limit(number) }
   scope :top_unrated, -> (team_id=nil, user_id=nil, number=nil) {
     select('dishes.*', 'COUNT(votes.id) AS votes', '(SUM(CASE WHEN votes.up = true THEN 1.0 ELSE 0 END) / NULLIF(COUNT(votes.id), 0)) AS percent_total')
     .left_outer_joins(:votes)
-    .where('votes.team_id = ?', team_id)
+    .where('votes.team_id = ? OR votes.id IS NULL', team_id)
     .order('percent_total DESC NULLS LAST, votes DESC')
     .group('dishes.id')
     .having('bool_and(votes.user_id != ? OR votes.user_id IS NULL)', user_id)
