@@ -1,7 +1,7 @@
 class WebhooksController < ApplicationController
   def slack
     category = params[:command][1..-1]
-    not_found unless params[:token] == ENV['SLACK_SLASH_TOKEN'] && Rails.configuration.categories.include?(category)
+    not_found unless Rails.configuration.categories.include?(category) && ENV['SLACK_API_VERIFICATION_TOKEN'] == params[:token]
     text = "Sorry, I didn't get that. Say the name of a restaurant with a +/- to vote, or say 'info' for a list of all keywords."
     year = Time.now.year
     user_name = params[:user_name]
@@ -48,6 +48,10 @@ class WebhooksController < ApplicationController
       text = show_full_details(dishes) if dishes.present?
     end
     render json: {'text': text, 'response_type': visibility }
+  end
+
+  def authorize
+    redirect_to :root
   end
 
 private
