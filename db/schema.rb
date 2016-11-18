@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161116222332) do
+ActiveRecord::Schema.define(version: 20161118220037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,13 @@ ActiveRecord::Schema.define(version: 20161116222332) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "teams", force: :cascade do |t|
+    t.string   "name"
+    t.string   "slack_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "votes", force: :cascade do |t|
     t.boolean  "up",         null: false
     t.datetime "created_at", null: false
@@ -39,6 +46,8 @@ ActiveRecord::Schema.define(version: 20161116222332) do
     t.string   "user_id"
     t.integer  "dish_id"
     t.string   "user_name"
+    t.integer  "team_id"
+    t.index ["team_id"], name: "index_votes_on_team_id", using: :btree
     t.index ["up"], name: "index_votes_on_up", using: :btree
   end
 
