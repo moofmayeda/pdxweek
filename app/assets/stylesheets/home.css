@@ -1,4 +1,13 @@
 body {
   text-align: center;
-  margin-top: 200px;
+  margin-top: 125px;
+}
+
+.main {
+  margin-bottom: 50px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }
