@@ -2,9 +2,6 @@ class RestaurantsController < ApplicationController
   http_basic_authenticate_with :name => "admin", :password => ENV['ADMIN_PASSWORD'], except: :home
 
   def home
-    @pizza_restaurants = Restaurant.participating('pizza', 2016)
-    @burger_restaurants = Restaurant.participating('burger', 2016)
-    @dumpling_restaurants = Restaurant.participating('dumpling', 2016)
   end
 
   def index
