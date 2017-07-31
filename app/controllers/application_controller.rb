@@ -16,7 +16,8 @@ protected
 
   def show_full_details(team, list)
     result = list.map do |dish|
-      text = "#{dish.restaurant.name}"
+      text = dish.restaurant.name
+      text += " #{dish.name}" if dish.name.present?
       text += "\n#{dish.upvotes.team(team.id).count} :thumbsup::"
       text += " _" + dish.upvotes.team(team.id).map(&:user_name).join(', ') + "_" if dish.upvotes.present?
       text += "\n#{dish.downvotes.team(team.id).count} :thumbsdown::"
